@@ -121,7 +121,7 @@ The ID hashes should be changing every few seconds, and you should see new workf
 The quick-and-dirty way to stop the test is to just delete the loading deployment:
 
   ```shell
-  k delete deployment -f deployment.yaml
+  k delete -f deployment.yaml
   ```
 
 Alternatively, you can scale down the deployment:
