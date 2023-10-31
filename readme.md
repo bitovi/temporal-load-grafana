@@ -160,39 +160,7 @@ tctl workflow start --taskqueue benchmark --workflow_type ExecuteActivity --exec
 
 this isn't isn't working right now. :arrow-up:
 
-
 ## appendix
-
-### deploy kube-prom
-
-1. `git clone https://github.com/prometheus-operator/kube-prometheus.git && cd kube-prometheus`
-1. Create the monitoring stack using the config in the manifests directory:
-
-    ```shell
-    # Create the namespace and CRDs, and then wait for them to be available before creating the remaining resources
-    # Note that due to some CRD size we are using kubectl server-side apply feature which is generally available since kubernetes 1.22.
-    # If you are using previous kubernetes versions this feature may not be available and you would need to use kubectl create instead.
-    kubectl apply --server-side -f manifests/setup
-    kubectl wait \
-      --for condition=Established \
-      --all CustomResourceDefinition \
-      --namespace=monitoring
-    kubectl apply -f manifests/
-    ```
-
-1. Set up LoadBalancer/PortForwarding:
-  
-      ```shell
-      kubectl port-forward --namespace monitoring svc/prometheus-k8s 9090
-      ```
-  
-    Or, you can set the service type to LoadBalancer to avoid having to set up PF every time.
-
-1. Teardown:
-
-    ```shell
-    kubectl delete --ignore-not-found=true -f manifests/ -f manifests/setup
-    ```
 
 ### Import the Temporal dashboards
 
