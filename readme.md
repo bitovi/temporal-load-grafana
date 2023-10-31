@@ -132,6 +132,35 @@ Alternatively, you can scale down the deployment:
 
 You can of course use your k8s interface of choice to do this as well (k9s, openlens, etc)
 
+### Modifying the load testing
+
+#### Scale up workers
+
+You can increase the load by scaling up the deployment:
+
+  ```shell
+  k scale deployment benchmark-soak-test --replicas=10
+  ```
+
+#### Change the load test
+
+The `soak-test` runner can be adjusted either with Environment Variables or with command line flags.
+
+See the official documentation for details: <https://github.com/temporalio/benchmark-workers/pkgs/container/benchmark-workers#runner>
+
+#### Run with tctl
+
+As an alternative to the above options, you can run benchmark tests directly with `tctl`.
+
+Once the worker is deployed, shell into the pod container, and execute:
+
+```
+tctl workflow start --taskqueue benchmark --workflow_type ExecuteActivity --execution_timeout 60 -i '{"Count":1,"Activity":"Sleep","Input":{"SleepTimeInSeconds":3}}'
+```
+
+this isn't isn't working right now. :arrow-up:
+
+
 ## appendix
 
 ### deploy kube-prom
