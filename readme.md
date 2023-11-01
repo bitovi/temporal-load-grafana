@@ -113,6 +113,13 @@ _NOTE: this document uses the alias `k` for `kubectl` (and you should too!)_
   git clone https://github.com/bitovi/temporal-load-grafana.git
   ```
 
+### Import the Temporal dashboards
+
+In the Grafana UI, paste the content of `./server-general.json` into the Dashboard import window.
+
+- pulled from <https://github.com/temporalio/dashboards/blob/master/server/server-general.json>
+
+
 ### Deploy the load test harness
 
   ```shell
@@ -129,6 +136,12 @@ The provided deployment file is configured to start the load test immediately. Y
 
 Click the refresh button to see the latest activity: ↻ <br>
 You should see new workflows being created with each refresh.
+
+### Observe the load in Grafana
+
+In the Grafana UI, select the `Temporal Server` dashboard that you imported above.
+
+You should see the load increasing in the various graphs.
 
 ### Scale up workers
 
@@ -154,7 +167,13 @@ Alternatively, you can scale down the runner deployment:
 
 Of course, you can use your k8s interface of choice to do these operations: k9s, openlens, etc.
 
-#### Run with tctl
+## Viewing the metrics
+
+In Grafana, you will see the load taking its toll on the Temporal cluster.
+
+## Appendix
+
+### Run with `tctl`
 
 As an alternative to the above options, you can run benchmark tests directly with `tctl`.
 
@@ -173,14 +192,6 @@ Anywhere you have `tctl` available:
 This will start a workflow that executes a three-second `Sleep` activity once.<br>
 To execute the activity multiple times, change the `Count` value.<br>
 To change the sleep time, change the `SleepTimeInSeconds` value.
-
-## Appendix
-
-### Import the Temporal dashboards
-
-In the Grafana UI, paste the content of `./server-general.json` into the Dashboard import window.
-
-- pulled from <https://github.com/temporalio/dashboards/blob/master/server/server-general.json>
 
 ### Change the load test
 
