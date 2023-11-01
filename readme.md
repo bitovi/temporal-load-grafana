@@ -52,7 +52,9 @@ You should see new workflows being created with each refresh.
 
 In the Grafana UI, select the `Temporal Server` dashboard that you imported above.
 
-You should see the load increasing in the various graphs.
+You should see the load increasing in the various graphs. The peaks are increasing load, and the valleys are decreasing/no load.
+<br>
+<img width="1614" alt="Screenshot 2023-10-31 at 10 39 50 PM" src="https://github.com/bitovi/temporal-load-grafana/assets/8335079/fe487111-a06e-45c5-a4bf-809934cf22f2">
 
 ### Scale up
 
@@ -87,14 +89,6 @@ Alternatively, you can scale the runner deployment to 0:
 This keeps the deployment alive for easy up-scaling when ready.
 
 > Of course, you can use your k8s interface of choice instead of `kctl` to do these operations: [k9s](https://k9scli.io/), [openlens](https://github.com/MuhammedKalkan/OpenLens), etc.
-
-## Viewing the metrics
-
-In Grafana, you will see the load taking its toll on the Temporal cluster.
-
-The peaks are increasing load, and the valleys are decreasing/no load.
-<br>
-<img width="1614" alt="Screenshot 2023-10-31 at 10 39 50 PM" src="https://github.com/bitovi/temporal-load-grafana/assets/8335079/fe487111-a06e-45c5-a4bf-809934cf22f2">
 
 # What to look for
 
