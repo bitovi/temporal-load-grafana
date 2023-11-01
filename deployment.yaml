@@ -42,7 +42,7 @@ metadata:
     component: soak-test
   name: benchmark-soak-test
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: benchmark

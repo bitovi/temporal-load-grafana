@@ -110,19 +110,28 @@ _NOTE: this document uses the alias `k` for `kubectl` (and you should too!)_
   
 Copy the contents of <https://github.com/temporalio/benchmark-workers/blob/main/deployment.yaml> into a file named `deployment.yaml`.
 
-### Deploy the load test
+### Deploy the load test harness
 
   ```shell
-  > k apply -f deployment.yaml 
+  > k apply -f deployment.yaml [-n <namespace>]
   deployment.apps/benchmark-workers created
   deployment.apps/benchmark-soak-test created
   ```
 
 ### Confirm the activity in Temporal UI
 
-As soon as you deploy the load test, you should see activity in the Temporal UI. Click the reload button in the top right to see the latest activity: ↻
+The provided deployment file is configured to start the load test immediately. You should see activity in the Temporal UI within a few seconds.
 
-The ID hashes should be changing every few seconds, and you should see new workflows being created.
+Click the reload button in the top right to see the latest activity: ↻ <br>
+You should see new workflows being created with each refresh.
+
+### Scale up workers
+
+You can increase the load by scaling up the deployment:
+
+  ```shell
+  k scale deployment benchmark-soak-test --replicas=10 [-n <namespace>]
+  ```
 
 ### Stop the test
 
@@ -135,40 +144,32 @@ The quick-and-dirty way to stop the test is to just delete the loading deploymen
 Alternatively, you can scale down the deployment:
 
   ```shell
-  k scale deployment benchmark-workers --replicas=0
+  k scale deployment benchmark-soak-test --replicas=0
   ```
 
-You can of course use your k8s interface of choice to do this as well (k9s, openlens, etc)
-
-### Modifying the load testing
-
-#### Scale up workers
-
-You can increase the load by scaling up the deployment:
-
-  ```shell
-  k scale deployment benchmark-soak-test --replicas=10
-  ```
-
-#### Change the load test
-
-The `soak-test` runner can be adjusted either with Environment Variables or with command line flags.
-
-See the official documentation for details: <https://github.com/temporalio/benchmark-workers/pkgs/container/benchmark-workers#runner>
+Of course, you can use your k8s interface of choice to do this as well (k9s, openlens, etc)
 
 #### Run with tctl
 
 As an alternative to the above options, you can run benchmark tests directly with `tctl`.
 
-Once the worker is deployed, shell into the pod container, and execute:
+Anywhere you have `tctl` available:
 
-```shell
-tctl workflow start --taskqueue benchmark --workflow_type ExecuteActivity --execution_timeout 60 -i '{"Count":1,"Activity":"Sleep","Input":{"SleepTimeInSeconds":3}}'
-```
+1. Run `export TEMPORAL_CLI_ADDRESS=<temporal-frontend-service-address:port>`
+1. Execute:
 
-this isn't isn't working right now. :arrow-up:
+    ```shell
+    tctl workflow start --taskqueue benchmark \
+    --workflow_type ExecuteActivity \
+    --execution_timeout 60 \
+    -i '{"Count":1,"Activity":"Sleep","Input":{"SleepTimeInSeconds":3}}'
+    ```
 
-## appendix
+This will start a workflow that executes a three-second `Sleep` activity once.<br>
+To execute the activity multiple times, change the `Count` value.<br>
+To change the sleep time, change the `SleepTimeInSeconds` value.
+
+## Appendix
 
 ### Import the Temporal dashboards
 
@@ -176,6 +177,29 @@ In the Grafana UI, paste the content of `./server-general.json` into the Dashboa
 
 - pulled from <https://github.com/temporalio/dashboards/blob/master/server/server-general.json>
 
-## Log In to grafana
+### Change the load test
 
-user/pass should be admin/admin
+In most cases, the default benchmark test provided by the `sleep` command above is adequate for load testing your Temporal cluster.
+
+If necessary, the `soak-test` runner configuration can be adjusted either with Environment Variables or with command line flags. There aren't too many options, but see the official documentation for details: <https://github.com/temporalio/benchmark-workers/pkgs/container/benchmark-workers#runner>
+
+### Log In to grafana
+
+In some installs of Grafana, the default username is `admin` and the default password is `admin`.
+
+In others you might have to shell into the Grafana pod to get the password:
+
+```bash
+kubectl get pods -n temporal
+kubectl exec -it <grafana-pod-name> -n temporal -- /bin/bash
+```
+
+> You can get the pod name with `kubectl get pods -n temporal`
+>
+> K8s tools like k9s and openlens provide one-click access to shell into pods.
+
+Then run:
+
+```bash
+env | grep -i password | sed s/[^=]*=//
+```
