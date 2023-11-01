@@ -1,6 +1,6 @@
 # Temporal Load Testing
 
-Let's do some load testing on Temporal.
+Let's do some load testing on Temporal. This will help us configure our cluster for efficiency, robustness, and cost control.
 <!-- 
 ## Create Cluster
 
