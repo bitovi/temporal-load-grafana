@@ -98,31 +98,36 @@ In the Temporal chart's directory:
 
 Using: <https://github.com/temporalio/benchmark-workers/pkgs/container/benchmark-workers>
 
+### Prerequisites
+
+- A running Temporal cluster
+- `kubectl` configured to access the cluster
+- Access to the Grafana and Temporal UIs
+
 _NOTE: this document uses the alias `k` for `kubectl` (and you should too!)_
 
-### Create a dir for our files
+### Clone this repo
 
   ```shell
-  mkdir load && cd load
+  cd /path/to/your/projects
+  git clone https://github.com/bitovi/temporal-load-grafana.git
   ```
-
-### Create the deployment manifest
-  
-Copy the contents of <https://github.com/temporalio/benchmark-workers/blob/main/deployment.yaml> into a file named `deployment.yaml`.
 
 ### Deploy the load test harness
 
   ```shell
-  > k apply -f deployment.yaml [-n <namespace>]
-  deployment.apps/benchmark-workers created
-  deployment.apps/benchmark-soak-test created
+  k apply -f deployment.yaml [-n <namespace>]
+
+  # you should see:
+  # deployment.apps/benchmark-workers created
+  # deployment.apps/benchmark-soak-test created
   ```
 
 ### Confirm the activity in Temporal UI
 
 The provided deployment file is configured to start the load test immediately. You should see activity in the Temporal UI within a few seconds.
 
-Click the reload button in the top right to see the latest activity: ↻ <br>
+Click the refresh button to see the latest activity: ↻ <br>
 You should see new workflows being created with each refresh.
 
 ### Scale up workers
@@ -141,13 +146,13 @@ The quick-and-dirty way to stop the test is to just delete the loading deploymen
   k delete -f deployment.yaml
   ```
 
-Alternatively, you can scale down the deployment:
+Alternatively, you can scale down the runner deployment:
 
   ```shell
   k scale deployment benchmark-soak-test --replicas=0
   ```
 
-Of course, you can use your k8s interface of choice to do this as well (k9s, openlens, etc)
+Of course, you can use your k8s interface of choice to do these operations: k9s, openlens, etc.
 
 #### Run with tctl
 
