@@ -4,43 +4,6 @@ Let's do some load testing on Temporal. This will help us configure our cluster 
 <!-- 
 ## Create Cluster
 
-```shell
-eksctl create cluster \
---name vantage-temporal \
---version 1.28 \
---region us-east-2 \
---nodegroup-name temporal-nodes \
---node-type t2.large \
---nodes 3
-```
-
-### Rightsizing nodes & pods
-
-https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html#AvailableIpPerENI
-
-- 2 system pods per node
-- 1 ip reserved per node
-
-pod capacity per node = `(nics * addrs) - 3`
-
-### Install Volume Handler
-
-EKS doesn't come with a default volume handler. We need to install one.
-
-First, check if it's already installed:
-
-```shell
-
-
-```shell
-eksctl utils associate-iam-oidc-provider --region=us-east-2 --cluster=vantage-temporal --approve
-
-eksctl create addon --name aws-ebs-csi-driver \
-  --cluster vantage-temporal \
-  --region us-east-2 \
-  --service-account-role-arn arn:aws:iam::111122223333:role/AmazonEKS_EBS_CSI_DriverRole \
-  # --force
-``` -->
 <!-- 
 ## Install Temporal & Monitoring
 
@@ -48,26 +11,10 @@ Using: https://github.com/VantageDiscovery/helm-charts/tree/main/charts/temporal
 
 In the Temporal chart's directory:
 
-1. Change the `web` service type to `LoadBalancer` in `values.yaml`. This lets us access the UI from the itnernet.
-
-    ```yaml
-    web:
-    enabled: true
-    ...
-    service:
-      # set type to NodePort if access to web needs access from outside the cluster
-      # for more info see https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
-      type: ClusterIP  <--- CHANGE THIS TO 'LoadBalancer'
-      port: 8080
-      annotations: {}
-      ```
-
-    > For external access, NodePorts require an Ingress Controller. We've used a   LoadBalancer here because they require no further setup and are managed by the cloud provider (AWS).
-
 1. Update helm dependencies
 
     ```shell
-    helm dependencies update
+    helm dep up
     ```
 
 1. Create the `temporal` namespace (you can call it whatever you want)
