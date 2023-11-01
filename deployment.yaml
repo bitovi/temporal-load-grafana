@@ -6,7 +6,7 @@ metadata:
     component: workers
   name: benchmark-workers
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: benchmark
@@ -42,7 +42,7 @@ metadata:
     component: soak-test
   name: benchmark-soak-test
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: benchmark

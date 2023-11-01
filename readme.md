@@ -81,7 +81,15 @@ In the Temporal chart's directory:
     This installs Temporal, CassandraDB, Prometheus, and Grafana.
 
     ```shell
-    helm install temporaltest . --timeout 15m -n temporal
+    # helm install temporaltest . --timeout 15m -n temporal
+    
+    helm install \
+    --set server.replicaCount=1 \
+    --set cassandra.config.cluster_size=1 \
+    --set prometheus.enabled=true \
+    --set grafana.enabled=true \
+    --set elasticsearch.enabled=false \
+    temporaltest . --timeout 15m
     ```
 
     > `temporaltest` is the name of the Helm release. You can call it whatever you want. -->
@@ -154,7 +162,7 @@ As an alternative to the above options, you can run benchmark tests directly wit
 
 Once the worker is deployed, shell into the pod container, and execute:
 
-```
+```shell
 tctl workflow start --taskqueue benchmark --workflow_type ExecuteActivity --execution_timeout 60 -i '{"Count":1,"Activity":"Sleep","Input":{"SleepTimeInSeconds":3}}'
 ```
 
