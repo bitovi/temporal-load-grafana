@@ -143,12 +143,20 @@ In the Grafana UI, select the `Temporal Server` dashboard that you imported abov
 
 You should see the load increasing in the various graphs.
 
-### Scale up workers
+### Scale up
 
 You can increase the load by scaling up the deployment:
 
   ```shell
   k scale deployment benchmark-soak-test --replicas=10 [-n <namespace>]
+  ```
+
+### Scale down
+
+You can decrease the load by scaling down the deployment:
+
+  ```shell
+  k scale deployment benchmark-soak-test --replicas=5 [-n <namespace>]
   ```
 
 ### Stop the test
@@ -159,13 +167,15 @@ The quick-and-dirty way to stop the test is to just delete the loading deploymen
   k delete -f deployment.yaml
   ```
 
-Alternatively, you can scale down the runner deployment:
+Alternatively, you can scale the runner deployment to 0:
 
   ```shell
   k scale deployment benchmark-soak-test --replicas=0
   ```
 
-Of course, you can use your k8s interface of choice to do these operations: k9s, openlens, etc.
+This keeps the deployment alive for easy up-scaling when ready.
+
+> Of course, you can use your k8s interface of choice instead of `kctl` to do these operations: [k9s](https://k9scli.io/), [openlens](https://github.com/MuhammedKalkan/OpenLens), etc.
 
 ## Viewing the metrics
 
