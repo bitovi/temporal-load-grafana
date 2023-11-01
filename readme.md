@@ -96,6 +96,31 @@ The peaks are increasing load, and the valleys are decreasing/no load.
 <br>
 <img width="1614" alt="Screenshot 2023-10-31 at 10 39 50 PM" src="https://github.com/bitovi/temporal-load-grafana/assets/8335079/fe487111-a06e-45c5-a4bf-809934cf22f2">
 
+# What to look for
+
+This benchmark creates a stable load test. What are the key metrics to look for?
+
+The most critical metric is `state_transitions_count_count`. This is the throughput of your Temporal system. As you increase and decrease the load, you'll see the `state_transitions_count_count` react.
+
+Specifically, the metric is defined as `sum(rate(state_transition_count_count[1m]))`
+
+> That is not a typo, the metric name is `...count_count`.
+
+At a certain load, you will see the `state_transition_count_count` plateau, or even start to drop. This is a sign that you've found a bottleneck in the system. Where is it? You can look at the metrics suggested above. You can also inspect the resource utilization of your cluster. Are any worker pods at CPU or Memory limits? Is throttling happening on the node?
+
+To scale the service you've identified as a potential bottleneck, scale the deployment:
+
+```shell
+k scale deployment <deployment_name> --replicas=<desired_replicas> [-n <namespace]
+```
+
+If you're not sure of the specific name of the deployment:
+
+```shell
+k get deployments [-n <namespace>]
+```
+
+As always, `kubectl` is just one way to manage your cluster. K9s and openlens are highly recommended.
 
 ## Appendix
 
@@ -124,24 +149,3 @@ To change the sleep time, change the `SleepTimeInSeconds` value.
 In most cases, the default benchmark test provided by the `sleep` command above is adequate for load testing your Temporal cluster.
 
 If necessary, the `soak-test` runner configuration can be adjusted either with Environment Variables or with command line flags. There aren't too many options, but see the official documentation for details: <https://github.com/temporalio/benchmark-workers/pkgs/container/benchmark-workers#runner>
-
-### Log In to grafana
-
-In some installs of Grafana, the default username is `admin` and the default password is `admin`.
-
-In others you might have to shell into the Grafana pod to get the password:
-
-```bash
-kubectl get pods -n temporal
-kubectl exec -it <grafana-pod-name> -n temporal -- /bin/bash
-```
-
-> You can get the pod name with `kubectl get pods -n temporal`
->
-> K8s tools like k9s and openlens provide one-click access to shell into pods.
-
-Then run:
-
-```bash
-env | grep -i password | sed s/[^=]*=//
-```
