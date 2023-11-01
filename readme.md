@@ -45,6 +45,9 @@ The provided deployment file is configured to start the load test immediately. Y
 Click the refresh button to see the latest activity: ↻ <br>
 You should see new workflows being created with each refresh.
 
+<img width="1516" alt="Screenshot 2023-10-31 at 11 13 57 PM" src="https://github.com/bitovi/temporal-load-grafana/assets/8335079/2996692e-13d8-4253-bbda-0022b5435b1c">
+
+
 ### Observe the load in Grafana
 
 In the Grafana UI, select the `Temporal Server` dashboard that you imported above.
