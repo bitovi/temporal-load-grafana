@@ -172,7 +172,9 @@ Of course, you can use your k8s interface of choice to do these operations: k9s,
 In Grafana, you will see the load taking its toll on the Temporal cluster.
 
 The peaks are increasing load, and the valleys are decreasing/no load.
-<img width="1614" alt="Screenshot 2023-10-31 at 10 39 50 PM" src="https://github.com/bitovi/temporal-load-grafana/assets/8335079/ef4863b2-e5cc-45c8-b85e-c6519811c4b9">
+<br>
+<img width="1614" alt="Screenshot 2023-10-31 at 10 39 50 PM" src="https://github.com/bitovi/temporal-load-grafana/assets/8335079/fe487111-a06e-45c5-a4bf-809934cf22f2">
+
 
 ## Appendix
 
