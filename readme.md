@@ -1,45 +1,6 @@
 # Temporal Load Testing
 
 Let's do some load testing on Temporal. This will help us configure our cluster for efficiency, robustness, and cost control.
-<!-- 
-## Create Cluster
-
-<!-- 
-## Install Temporal & Monitoring
-
-Using: https://github.com/VantageDiscovery/helm-charts/tree/main/charts/temporalio
-
-In the Temporal chart's directory:
-
-1. Update helm dependencies
-
-    ```shell
-    helm dep up
-    ```
-
-1. Create the `temporal` namespace (you can call it whatever you want)
-
-    ```shell
-    k create ns temporal
-    ```
-
-1. Install the chart
-
-    This installs Temporal, CassandraDB, Prometheus, and Grafana.
-
-    ```shell
-    # helm install temporaltest . --timeout 15m -n temporal
-    
-    helm install \
-    --set server.replicaCount=1 \
-    --set cassandra.config.cluster_size=1 \
-    --set prometheus.enabled=true \
-    --set grafana.enabled=true \
-    --set elasticsearch.enabled=false \
-    temporaltest . --timeout 15m
-    ```
-
-    > `temporaltest` is the name of the Helm release. You can call it whatever you want. -->
 
 ## Load Test Deployment
 
