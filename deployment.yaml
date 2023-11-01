@@ -6,7 +6,7 @@ metadata:
     component: workers
   name: benchmark-workers
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: benchmark
